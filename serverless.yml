@@ -1,0 +1,101 @@
+service: aws-functions
+
+package:
+  exclude:
+    - node_modules/**
+    - env/**
+    - .serverless/**
+    - .vscode/**
+    - .pytest_cache/**
+    - package*.json
+    - __pycache__/**
+    - .jmx
+    - tests/**
+    - reports/**
+    - builds/**
+
+custom:
+    account: __YOUR_AWS_ACCOUNT_ID__
+    cert: arn:aws:acm:${self:provider.region}:${self:custom.account}:certificate/__CERT_ARN__
+    s3bucket: __S3_BUCKET__
+    customDomain: example.com
+    customSubDomin: ops
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ops
+  region: us-west-1
+  stackName: ${self:provider.stage}-${self:service}
+  httpApi:
+    payload: '1.0'
+  deploymentBucket:
+    name: ${self:custom.s3bucket}
+    serverSideEncryption: AES256
+  deploymentPrefix: serverless
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - ses:SendEmail*
+      Resource: 'arn:aws:ses:${self:provider.region}:${self:custom.account}:identity/${self:custom.customDomain}' 
+    - Effect: Allow
+      Action:
+        - kms:Describe*
+        - kms:Decrypt*
+        - kms:List*
+      Resource: 'arn:aws:kms:${self:provider.region}:${self:custom.account}:key/*' 
+    - Effect: Allow
+      Action:
+        - ssm:Describe*
+        - ssm:List*
+        - ssm:Get*
+      Resource: 
+        - 'arn:aws:ssm:${self:provider.region}:${self:custom.account}:parameter/*'
+    - Effect: Allow
+      Action:
+        - s3:Describe*
+        - s3:List*
+      Resource: 'arn:aws:s3:::*' 
+    - Effect: Allow
+      Action:
+        - s3:Get*
+        - s3:Put*
+      Resource: 
+        - 'arn:aws:s3:::${self:custom.s3bucket}/*'
+
+functions:
+  adobe:
+    name: ${self:provider.stage}-${self:service}-adobe
+    description: webhook for adobe cloudmanager events
+    handler: src/adobe.main
+    events:
+      - httpApi: 'GET /adobeio'
+      - httpApi: 'POST /adobeio'
+    timeout: 28
+
+resources:
+  Resources:
+    customDomainApi:
+      Type: AWS::ApiGatewayV2::DomainName
+      Properties:
+        DomainName: ${self:custom.customSubDomin}.${self:custom.customDomain}
+        DomainNameConfigurations:
+          - EndpointType: REGIONAL
+            CertificateArn: ${self:custom.cert}
+    
+    customDomainApiMap:
+      Type: AWS::ApiGatewayV2::ApiMapping
+      Properties: 
+        ApiId: !Ref HttpApi
+        DomainName: ${self:custom.customSubDomin}.${self:custom.customDomain}
+        Stage: !Ref HttpApiStage
+    
+    customDomainR53:
+      Type: AWS::Route53::RecordSet
+      Properties: 
+        HostedZoneName: ${self:custom.customDomain}.
+        Name: ${self:custom.customSubDomin}.${self:custom.customDomain} 
+        ResourceRecords: 
+          - !GetAtt customDomainApi.RegionalDomainName
+        TTL: 300
+        Type: CNAME
