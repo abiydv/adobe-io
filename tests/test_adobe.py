@@ -173,29 +173,6 @@ aio_generate_jwt tests
 """
 
 @mock.patch('src.adobe.aws_read_ssm')
-def test_aio_generate_jwt_success(mock_aws_read_ssm):
-    demo_key = """-----BEGIN RSA PRIVATE KEY-----
-MIICWwIBAAKBgQCpGpiQhpq34i/x3TRCiTdGY2qFgshdLmbdhSE5aJ2PixnvRflV
-XDFYgGi+/hLuv4mTGQpoxKff+ADvZUjPmJcYd1YfCpoLPw4T3HM2/fTvwi0qPKSK
-MtMbh7tc+ave2Ged+mOLyHYj+HoIGHxy2jj1zMd+awz4Q67yCbPVVNL2lQIDAQAB
-AoGADDZkgEOIVvFZ3xDHnmqEeGvjnILGb5xTR3o+3QOGJYC5PcOC7zw6QBb9+ZUl
-zuI8UEhFrS1OpmklwCRDbuKpPrgBpQJSMZVp7WI/XuUr7CpBwaXu8BSRR2w65zBe
-KDRi/IplzGaew4LO0pcOjNqP7WP0bB1CtGQ2gn0nCDJvEoECQQDaD45WuK8YSmpi
-0COvVKdieYhuf6ZiGZFKLlhWNfXxH1nHOXIHlJNNFbu1oKDmMIMwJ1/hDXi6jrOZ
-43nhbg51AkEAxoZ/Lg4KxQ2cl7kwl/rO75Sy3B8MMSURbwYnPYobm99yeort+S2b
-L5DKooNWI5amAIlmAcJlr5aNGXX07Z6DoQJATMYhVUMc0q6Qmk2x4q8pZ7BmapEi
-4XMjBj0e+OtytfxVvaDqFuUmn4NBXYc6XxFBfxi91xzJHtXTQiEm7kmzaQJAO1t9
-bTy/lZlzR54UXGyeMN4J+GzEDXGi28pAM1M23A0cQm2Fp6ouKzOkkqCoQa3KZoCu
-YjpIgw6Fk6ZEHEP34QJAbcX+zIjCtuoLnxruwJJTWPAlz7Zx0pHEnE7mCeT9by84
-oW3BDKIHiamw35uOHwPKiUw16b//cKjJ+BjoI3rDlA==
------END RSA PRIVATE KEY-----"""
-
-    demo_payload = {"random":"payload"}
-    demo_encoded_payload = b'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJyYW5kb20iOiJwYXlsb2FkIn0.IfZHkU6AY6z9qyj-_MZeR-968CJpLyBbBAY6gLExYBrHHizlHrz7RK0xbXNiEFPPd1448aGfYRZ4QsqvTqoqWBVrq3s6if0_Beu5dMcrN0hs8d6oUZdpwAOsZZv4hTsy1TFljVVM0efYTNeHEqHG_v38zEfF4RYbrihik1-K3uA'
-    mock_aws_read_ssm.return_value = demo_key
-    assert src.adobe.aio_generate_jwt(demo_payload) == demo_encoded_payload
-
-@mock.patch('src.adobe.aws_read_ssm')
 def test_aio_generate_jwt_fail_invalid_key(mock_aws_read_ssm):
     demo_key = "invalid_key"
     demo_payload = {"random":"payload"}
