@@ -7,13 +7,27 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: check versions
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
         run: |
-          pip3 --version
-          python3 --version
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint
+        run: |
+          flake8 --count --exit-zero --statistics
+
+      - name: Check Coverage
+        run: |
+          coverage run -m pytest
+          coverage report --fail-under=80
 

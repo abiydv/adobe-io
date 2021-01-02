@@ -1,5 +1,6 @@
 # Adobe I/O Cloud Manager Integration
 
+Test 
 Deploy this API Gateway + Lambda in your AWS account to get notified of executions on Adobe Cloudmanager. Notifications will be sent to both email, and MS Teams.
 
 This can be extended to implement more functionalities like auto-approve, auto-reject pending executions etc.
@@ -23,18 +24,19 @@ More details - https://abiydv.github.io/posts/adobe-io-cloudmanager-api
 
 1. Create and activate virtual environment
     ```
-    $ python3 -m venv env
+    $ python -m venv env
     $ source env/bin/activate
     ```
 
 1. Install dependencies
     ```
-    (env) $ pip3 install -r requirements.txt
+    (env) $ pip install -r requirements.txt
     ```
 
-1. Running lint, test, coverage reports
+1. Format, lint, run tests, check coverage reports etc.
     ```
-    (env) $ pylint src/*.py --rcfile=setup.cfg
+    (env) $ black src/*.py
+    (env) $ flake8
     (env) $ pytest
     (env) $ coverage run -m pytest
     (env) $ coverage html

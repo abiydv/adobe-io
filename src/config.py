@@ -1,16 +1,16 @@
 # Configurations
 
-REGION = 'us-west-1'
+REGION = "us-west-1"
 
 JWT_DURATION = 30
 JWT_ALGO = "RS256"
 
-AIO_ORG_ID = "__alpha_numeric_string__"      # available in your adobe i/o console
-AIO_CLIENT_ID = "__alpha_numeric_string__"   # available in your adobe i/o console
-AIO_CLIENT_SECRET = "/adobeio/client_secret" # this maps to aws ssm parameter store
-PRIVATE_KEY = "/adobeio/cert/privatekey"     # this maps to aws ssm parameter store
+AIO_ORG_ID = "__alpha_numeric_string__"  # available in your adobe i/o console
+AIO_CLIENT_ID = "__alpha_numeric_string__"  # available in your adobe i/o console
+AIO_CLIENT_SECRET = "/adobeio/client_secret"  # this maps to aws ssm parameter store
+PRIVATE_KEY = "/adobeio/cert/privatekey"  # this maps to aws ssm parameter store
 
-TECHNICAL_ACCOUNT_ID = "__alpha_numeric_string__" # available in your adobe i/o console
+TECHNICAL_ACCOUNT_ID = "__alpha_numeric_string__"  # available in your adobe i/o console
 
 AIO_BASE_URL = "https://ims-na1.adobelogin.com"
 CLDMGR_URL = "{}/s/ent_cloudmgr_sdk".format(AIO_BASE_URL)
@@ -20,8 +20,8 @@ AUDIENCE = "{}/c/{}".format(AIO_BASE_URL, AIO_CLIENT_ID)
 JWT_URL = "{}/ims/exchange/jwt/".format(AIO_BASE_URL)
 
 
-EMAIL_TO = "notify@example.com"       # replace
-EMAIL_FROM = "no-reply@example.com"   # replace
+EMAIL_TO = "notify@example.com"  # replace
+EMAIL_FROM = "no-reply@example.com"  # replace
 
 TEAMS_WH = "https://outlook.office.com/webhook/__teams_incoming_webhook__"  # replace
 
@@ -37,7 +37,7 @@ COLOR = {
     "stopped": "#ff0000",
     "failed": "#ff0000",
     "alarm": "#ff0000",
-    "alert": "#ff0000"
+    "alert": "#ff0000",
 }
 
 EMOJI = {
@@ -52,7 +52,7 @@ EMOJI = {
     "stopped": "&#x1F44E;",
     "failed": "&#x1F44E;",
     "alarm": "&#x1F44E;",
-    "alert": "&#x1F44E;"
+    "alert": "&#x1F44E;",
 }
 
 EMAIL_TEMPLATE = """
@@ -108,4 +108,4 @@ EMAIL_TEMPLATE = """
 </table>
 </body>
 </html>
-"""
+"""  # noqa: E501
